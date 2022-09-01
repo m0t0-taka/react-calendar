@@ -3,8 +3,22 @@ import { MdClose } from "react-icons/md";
 import GlobalContext from "../context/GlobalContext";
 
 export const EventModal = () => {
-  const { daySelected, setShowEventModal } = useContext(GlobalContext);
+  const { daySelected, setShowEventModal, dispatchCalEvent } =
+    useContext(GlobalContext);
   const [title, setTitle] = useState("");
+
+  const handleSubmit = (e) => {
+    // クリック時に送信するというdefaultの動作をキャンセルする
+    e.preventDefault();
+    const calendarEvent = {
+      title: title,
+      day: daySelected.valueOf(),
+      id: Date.now(),
+    };
+    dispatchCalEvent({ type: "push", payload: calendarEvent });
+    setShowEventModal(false);
+  };
+
   return (
     <div className="h-screen w-full fixed left-0 top-0 flex justify-center items-center">
       <form className="bg-white rounded-lg shadow-2xl w-1/4">
@@ -30,6 +44,15 @@ export const EventModal = () => {
             <p>{daySelected.format("dddd, MMMM DD")}</p>
           </div>
         </div>
+        <footer className="flex justify-end border-t p-3 mt-5">
+          <button
+            type="submit"
+            onClick={handleSubmit}
+            className="bg-blue-500 hover:bg-blue-600 px-6 py-2 rounded text-white"
+          >
+            Save
+          </button>
+        </footer>
       </form>
     </div>
   );
