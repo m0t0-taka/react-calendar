@@ -6,10 +6,10 @@ const saveEventsReducer = (state, { type, payload }) => {
   switch (type) {
     case "push":
       return [...state, payload];
-    // case "update":
-    //   return state.map((evt) => (evt.id === payload.id ? payload : evt));
-    // case "delete":
-    //   return state.filter((evt) => evt.id !== payload.id);
+    case "update":
+      return state.map((evt) => (evt.id === payload.id ? payload : evt));
+    case "delete":
+      return state.filter((evt) => evt.id !== payload.id);
     default:
       throw new Error();
   }
@@ -26,6 +26,7 @@ const ContextWrapper = (props) => {
   const [monthIndex, setMonthIndex] = useState(dayjs().month());
   const [daySelected, setDaySelected] = useState(dayjs());
   const [showEventModal, setShowEventModal] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState(null);
   const [savedEvents, dispatchCalEvent] = useReducer(
     saveEventsReducer,
     [],
@@ -38,9 +39,11 @@ const ContextWrapper = (props) => {
     localStorage.setItem("savedEvents", JSON.stringify(savedEvents));
   }, [savedEvents]);
 
-  // useEffect(() => {
-  //   localStorage.clear();
-  // }, []);
+  useEffect(() => {
+    if (!showEventModal) {
+      setSelectedEvent(null);
+    }
+  }, [showEventModal]);
 
   return (
     <GlobalContext.Provider
@@ -51,6 +54,8 @@ const ContextWrapper = (props) => {
         setDaySelected,
         showEventModal,
         setShowEventModal,
+        selectedEvent,
+        setSelectedEvent,
         dispatchCalEvent,
         savedEvents,
       }}

@@ -1,11 +1,11 @@
 import React, { useState, useContext } from "react";
-import { MdClose } from "react-icons/md";
+import { MdDeleteForever, MdClose } from "react-icons/md";
 import GlobalContext from "../context/GlobalContext";
 
 export const EventModal = () => {
-  const { daySelected, setShowEventModal, dispatchCalEvent } =
+  const { daySelected, setShowEventModal, dispatchCalEvent, selectedEvent } =
     useContext(GlobalContext);
-  const [title, setTitle] = useState("");
+  const [title, setTitle] = useState(selectedEvent ? selectedEvent.title : "");
 
   const handleSubmit = (e) => {
     // クリック時に送信するというdefaultの動作をキャンセルする
@@ -13,9 +13,13 @@ export const EventModal = () => {
     const calendarEvent = {
       title: title,
       day: daySelected.valueOf(),
-      id: Date.now(),
+      id: selectedEvent ? selectedEvent.id : Date.now(),
     };
-    dispatchCalEvent({ type: "push", payload: calendarEvent });
+    if (selectedEvent) {
+      dispatchCalEvent({ type: "update", payload: calendarEvent });
+    } else {
+      dispatchCalEvent({ type: "push", payload: calendarEvent });
+    }
     setShowEventModal(false);
   };
 
@@ -24,6 +28,16 @@ export const EventModal = () => {
       <form className="bg-white rounded-lg shadow-2xl w-1/4">
         <header className="bg-gray-100 px-4 py-2 flex justify-end">
           <div className="text-gray-400">
+            {selectedEvent && (
+              <button
+                onClick={() => {
+                  dispatchCalEvent({ type: "delete", payload: selectedEvent });
+                  setShowEventModal(false);
+                }}
+              >
+                <MdDeleteForever />
+              </button>
+            )}
             <button onClick={() => setShowEventModal(false)}>
               <MdClose />
             </button>

@@ -5,7 +5,7 @@ import GlobalContext from "../context/GlobalContext";
 export const Day = (props) => {
   const { day, rowIdx } = props;
   const [dayEvents, setDayEvents] = useState([]);
-  const { setDaySelected, setShowEventModal, savedEvents } =
+  const { setDaySelected, setShowEventModal, savedEvents, setSelectedEvent } =
     useContext(GlobalContext);
 
   // 今日の日付を色付けする
@@ -42,6 +42,7 @@ export const Day = (props) => {
         {dayEvents.map((evt, idx) => (
           <div
             key={idx}
+            onClick={() => setSelectedEvent(evt)}
             className={`bg-neutral-200 p-1 mr-3 text-gray-600 text-sm rounded mb-1 truncate`}
           >
             {evt.title}
