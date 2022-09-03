@@ -20,7 +20,7 @@ export const CalendarHeader = () => {
   };
   return (
     <header className="px-4 py-2 flex items-center">
-      <h1 className="mr-10 text-xl text-gray-500 fond-bold">カレンダー</h1>
+      <h1 className="mr-10 text-xl text-gray-500 fond-bold">月間カレンダー</h1>
       <button onClick={handleReset} className="border rounded py-2 px-4 mr-5">
         今日
       </button>
@@ -31,9 +31,7 @@ export const CalendarHeader = () => {
       </button>
       {/* <div> */}
       <h2 className="mx-1 text-xl text-gray-500 font-bold w-32">
-        {`${dayjs(new Date(dayjs().year(), monthIndex)).format(
-          "YYYY"
-        )}年 ${dayjs(new Date(dayjs().year(), monthIndex)).format("MMM")}`}
+        {dayjs(new Date(dayjs().year(), monthIndex)).format("YYYY年 MMM")}
       </h2>
       {/* </div> */}
 
