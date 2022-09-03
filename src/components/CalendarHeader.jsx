@@ -25,14 +25,17 @@ export const CalendarHeader = () => {
         今日
       </button>
       <button onClick={handlePrevMonth}>
-        <span className="cursor-pointer text-gray-600 mx-2">
+        <span className="cursor-pointer text-gray-600 mx-10">
           <MdChevronLeft />
         </span>
       </button>
-
-      <h2 className="ml-4 text-xl text-gray-500 font-bold">
-        {dayjs(new Date(dayjs().year(), monthIndex)).format("MMMM YYYY")}
+      {/* <div> */}
+      <h2 className="mx-1 text-xl text-gray-500 font-bold w-32">
+        {`${dayjs(new Date(dayjs().year(), monthIndex)).format(
+          "YYYY"
+        )}年 ${dayjs(new Date(dayjs().year(), monthIndex)).format("MMM")}`}
       </h2>
+      {/* </div> */}
 
       <button onClick={handelNextMonth}>
         <span className="cursor-pointer text-gray-600 mx-2">
