@@ -1,13 +1,13 @@
 import React, { useContext, useEffect, useState } from "react";
 import dayjs from "dayjs";
+
 import GlobalContext from "../context/GlobalContext";
 
 export const Day = (props) => {
-  const { day, rowIdx, setDaySelected } = props;
+  const { day, setDaySelected, setShowEventModal, setSelectedEvent } = props;
   const [dayEvents, setDayEvents] = useState([]);
 
-  const { setShowEventModal, savedEvents, setSelectedEvent } =
-    useContext(GlobalContext);
+  const { savedEvents } = useContext(GlobalContext);
 
   // 今日の日付を色付けする
   const getCurrentDayClass = () => {
