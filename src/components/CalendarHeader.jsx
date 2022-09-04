@@ -6,8 +6,8 @@ import GlobalContext from "../context/GlobalContext";
 
 dayjs.locale(ja);
 
-export const CalendarHeader = () => {
-  const { monthIndex, setMonthIndex } = useContext(GlobalContext);
+export const CalendarHeader = (props) => {
+  const { monthIndex, setMonthIndex } = props;
   const handlePrevMonth = () => {
     setMonthIndex(monthIndex - 1);
   };

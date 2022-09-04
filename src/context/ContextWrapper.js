@@ -24,8 +24,7 @@ const initEvents = () => {
 };
 
 const ContextWrapper = (props) => {
-  const [monthIndex, setMonthIndex] = useState(dayjs().month());
-  // const [daySelected, setDaySelected] = useState(dayjs());
+  // const [monthIndex, setMonthIndex] = useState(dayjs().month());
   const [showEventModal, setShowEventModal] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [savedEvents, dispatchCalEvent] = useReducer(
@@ -49,8 +48,6 @@ const ContextWrapper = (props) => {
   return (
     <GlobalContext.Provider
       value={{
-        monthIndex,
-        setMonthIndex,
         showEventModal,
         setShowEventModal,
         selectedEvent,

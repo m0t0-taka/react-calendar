@@ -11,7 +11,8 @@ import dayjs from "dayjs";
 function App() {
   const [currentMonth, setCurrentMonth] = useState(getMonth());
   const [daySelected, setDaySelected] = useState(dayjs());
-  const { monthIndex, showEventModal } = useContext(GlobalContext);
+  const [monthIndex, setMonthIndex] = useState(dayjs().month());
+  const { showEventModal } = useContext(GlobalContext);
 
   useEffect(() => {
     setCurrentMonth(getMonth(monthIndex));
@@ -21,7 +22,7 @@ function App() {
     <>
       {showEventModal && <EventModal daySelected={daySelected} />}
       <div className="h-screen flex flex-col">
-        <CalendarHeader />
+        <CalendarHeader monthIndex={monthIndex} setMonthIndex={setMonthIndex} />
         <div className="flex flex-1 p-2">
           <Month month={currentMonth} setDaySelected={setDaySelected} />
         </div>
