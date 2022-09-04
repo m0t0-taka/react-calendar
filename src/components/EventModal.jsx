@@ -2,8 +2,9 @@ import React, { useState, useContext } from "react";
 import { MdDeleteForever, MdClose } from "react-icons/md";
 import GlobalContext from "../context/GlobalContext";
 
-export const EventModal = () => {
-  const { daySelected, setShowEventModal, dispatchCalEvent, selectedEvent } =
+export const EventModal = (props) => {
+  const { daySelected } = props;
+  const { setShowEventModal, dispatchCalEvent, selectedEvent } =
     useContext(GlobalContext);
   const [title, setTitle] = useState(selectedEvent ? selectedEvent.title : "");
 

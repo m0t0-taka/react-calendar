@@ -1,5 +1,6 @@
 import React, { useReducer, useState, useEffect } from "react";
 import GlobalContext from "./GlobalContext";
+
 import dayjs from "dayjs";
 
 const saveEventsReducer = (state, { type, payload }) => {
@@ -24,7 +25,7 @@ const initEvents = () => {
 
 const ContextWrapper = (props) => {
   const [monthIndex, setMonthIndex] = useState(dayjs().month());
-  const [daySelected, setDaySelected] = useState(dayjs());
+  // const [daySelected, setDaySelected] = useState(dayjs());
   const [showEventModal, setShowEventModal] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [savedEvents, dispatchCalEvent] = useReducer(
@@ -50,8 +51,6 @@ const ContextWrapper = (props) => {
       value={{
         monthIndex,
         setMonthIndex,
-        daySelected,
-        setDaySelected,
         showEventModal,
         setShowEventModal,
         selectedEvent,

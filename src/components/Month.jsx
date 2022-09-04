@@ -3,7 +3,7 @@ import { Day } from "./Day";
 import { Week } from "./Week";
 
 export const Month = (props) => {
-  const { month } = props;
+  const { month, setDaySelected } = props;
   return (
     <div className="flex-1">
       <div className="grid grid-cols-7 grid-rows-1">
@@ -13,7 +13,12 @@ export const Month = (props) => {
         {month.map((row, i) => (
           <React.Fragment key={i}>
             {row.map((day, idx) => (
-              <Day day={day} key={idx} rowIdx={i} />
+              <Day
+                day={day}
+                key={idx}
+                rowIdx={i}
+                setDaySelected={setDaySelected}
+              />
             ))}
           </React.Fragment>
         ))}
