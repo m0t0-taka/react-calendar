@@ -3,9 +3,10 @@ import dayjs from "dayjs";
 import GlobalContext from "../context/GlobalContext";
 
 export const Day = (props) => {
-  const { day, rowIdx } = props;
+  const { day, rowIdx, setDaySelected } = props;
   const [dayEvents, setDayEvents] = useState([]);
-  const { setDaySelected, setShowEventModal, savedEvents, setSelectedEvent } =
+
+  const { setShowEventModal, savedEvents, setSelectedEvent } =
     useContext(GlobalContext);
 
   // 今日の日付を色付けする
