@@ -14,7 +14,7 @@ export const Day = (props) => {
   // 今日の日付を色付けする
   const getCurrentDayClass = () => {
     return day.format("DD-MM-YY") === dayjs().format("DD-MM-YY")
-      ? "bg-blue-600 text-white rounded-full w-7"
+      ? "bg-blue-600 text-white rounded-full leading-4 mb-1"
       : "";
   };
 
@@ -44,9 +44,10 @@ export const Day = (props) => {
           <div
             key={idx}
             onClick={() => setSelectedEvent(evt)}
-            className={`bg-neutral-200 p-1 mr-3 text-gray-600 text-sm rounded mb-1 truncate`}
+            className={`bg-neutral-200 p-1 mx-0.5 text-gray-600 text-sm rounded mb-1 truncate flex justify-between`}
           >
-            {evt.title}
+            <div>{evt.title}</div>
+            <div>{evt.time}</div>
           </div>
         ))}
       </div>
