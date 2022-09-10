@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { MdDeleteForever, MdClose } from "react-icons/md";
 import { IconContext } from "react-icons";
 
@@ -6,24 +6,51 @@ export const EventModal = (props) => {
   const { daySelected, setShowEventModal, selectedEvent, dispatchCalEvent } =
     props;
   const [title, setTitle] = useState(selectedEvent ? selectedEvent.title : "");
+  const [validation, setValidation] = useState("");
+  const [hour, setHour] = useState(
+    selectedEvent ? selectedEvent.time.slice(0, -5) : "6"
+  );
+  const [minute, setMinute] = useState(
+    selectedEvent ? selectedEvent.time.slice(-4, -2) : "00"
+  );
+  const [amPm, setAmPm] = useState(
+    selectedEvent ? selectedEvent.time.slice(-2) : "AM"
+  );
+  const [time, setTime] = useState(selectedEvent ? selectedEvent.time : "");
 
   const handleSubmit = (e) => {
     // クリック時に送信するというdefaultの動作をキャンセルする
     e.preventDefault();
-    const calendarEvent = {
-      title: title,
-      day: daySelected.valueOf(),
-      id: selectedEvent ? selectedEvent.id : Date.now(),
-    };
-    if (selectedEvent) {
-      dispatchCalEvent({ type: "update", payload: calendarEvent });
+    if (!title) {
+      setValidation("タイトルを入力してください");
     } else {
-      dispatchCalEvent({ type: "push", payload: calendarEvent });
+      const calendarEvent = {
+        id: selectedEvent ? selectedEvent.id : Date.now(),
+        day: daySelected.valueOf(),
+        title: title,
+        time: time,
+      };
+      if (selectedEvent) {
+        dispatchCalEvent({ type: "update", payload: calendarEvent });
+      } else {
+        dispatchCalEvent({ type: "push", payload: calendarEvent });
+      }
+      setShowEventModal(false);
     }
-    setShowEventModal(false);
   };
 
-  console.log(selectedEvent);
+  const handleChangeHour = (e) => {
+    setHour(e.target.value);
+  };
+  const handleChangeMinute = (e) => {
+    setMinute(e.target.value);
+  };
+  const handleChangeAmPm = (e) => {
+    setAmPm(e.target.value);
+  };
+  useEffect(() => {
+    setTime(`${hour}:${minute}${amPm}`);
+  }, [hour, minute, amPm]);
 
   return (
     <div className="h-screen w-full fixed left-0 top-0 flex justify-center items-center">
@@ -57,7 +84,7 @@ export const EventModal = (props) => {
           </div>
         </header>
         <div className="p-3">
-          <div className="grid grid-cols-1/5 items-end gap-y-7">
+          <div className="grid grid-cols-1/5 items-end gap-y-2">
             <input
               type="text"
               name="title"
@@ -67,40 +94,50 @@ export const EventModal = (props) => {
               className="pt-3 border-0 text-gray-600 text-xl font-semibold pb-2 w-full border-b-2 border-gray-200 focus:outline-none focus:ring-0 focus:border-blue-500"
               onChange={(e) => setTitle(e.target.value)}
             />
-            <div className="px-5 py-2 w-40 bg-white rounded-lg text-lg font-medium outline outline-offset-2 outline-1 outline-gray-200">
-              <div className="flex text-gray-600">
-                <select
-                  name="hours"
-                  className="bg-transparent text-xl appearance-none outline-none"
-                >
-                  <option value="1">1</option>
-                  <option value="2">2</option>
-                  <option value="3">3</option>
-                  <option value="4">4</option>
-                  <option value="5">5</option>
-                  <option value="6">6</option>
-                  <option value="7">7</option>
-                  <option value="8">8</option>
-                  <option value="9">9</option>
-                  <option value="10">10</option>
-                  <option value="11">11</option>
-                  <option value="12">12</option>
-                </select>
-                <span className="text-xl mr-3">:</span>
-                <select
-                  name="minutes"
-                  className="bg-transparent text-xl appearance-none outline-none mr-4"
-                >
-                  <option value="0">00</option>
-                  <option value="30">30</option>
-                </select>
-                <select
-                  name="ampm"
-                  className="bg-transparent text-xl appearance-none outline-none"
-                >
-                  <option value="am">AM</option>
-                  <option value="pm">PM</option>
-                </select>
+            <p className="text-rose-600">{validation ? validation : ""}</p>
+            <div className="flex">
+              <div className="flex-none pr-2 py-2 text-base">時刻</div>
+              <div className="flex-initial px-5 py-2 w-40 bg-white rounded-lg text-lg font-medium outline outline-offset-2 outline-1 outline-gray-200">
+                <div className="flex text-gray-600">
+                  <select
+                    name="hours"
+                    className="bg-transparent text-xl appearance-none outline-none"
+                    value={hour}
+                    onChange={handleChangeHour}
+                  >
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                  </select>
+                  <span className="text-xl mr-3">:</span>
+                  <select
+                    name="minutes"
+                    className="bg-transparent text-xl appearance-none outline-none mr-4"
+                    value={minute}
+                    onChange={handleChangeMinute}
+                  >
+                    <option value="00">00</option>
+                    <option value="30">30</option>
+                  </select>
+                  <select
+                    name="amPm"
+                    className="bg-transparent text-xl appearance-none outline-none"
+                    value={amPm}
+                    onChange={handleChangeAmPm}
+                  >
+                    <option value="AM">AM</option>
+                    <option value="PM">PM</option>
+                  </select>
+                </div>
               </div>
             </div>
           </div>
