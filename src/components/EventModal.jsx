@@ -1,11 +1,9 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import { MdDeleteForever, MdClose } from "react-icons/md";
-import GlobalContext from "../context/GlobalContext";
 
 export const EventModal = (props) => {
-  const { daySelected } = props;
-  const { setShowEventModal, dispatchCalEvent, selectedEvent } =
-    useContext(GlobalContext);
+  const { daySelected, setShowEventModal, selectedEvent, dispatchCalEvent } =
+    props;
   const [title, setTitle] = useState(selectedEvent ? selectedEvent.title : "");
 
   const handleSubmit = (e) => {
@@ -23,6 +21,8 @@ export const EventModal = (props) => {
     }
     setShowEventModal(false);
   };
+
+  console.log(selectedEvent);
 
   return (
     <div className="h-screen w-full fixed left-0 top-0 flex justify-center items-center">
@@ -68,7 +68,7 @@ export const EventModal = (props) => {
             onClick={handleSubmit}
             className="bg-blue-500 hover:bg-blue-600 px-6 py-2 rounded text-white"
           >
-            {title === "" ? "保存" : "更新"}
+            {selectedEvent === null ? "保存" : "更新"}
           </button>
         </footer>
       </form>
