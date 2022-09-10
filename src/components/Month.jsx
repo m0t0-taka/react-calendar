@@ -3,7 +3,13 @@ import { Day } from "./Day";
 import { Week } from "./Week";
 
 export const Month = (props) => {
-  const { month, setDaySelected, setShowEventModal, setSelectedEvent } = props;
+  const {
+    month,
+    setDaySelected,
+    setShowEventModal,
+    setSelectedEvent,
+    savedEvents,
+  } = props;
 
   return (
     <div className="flex-1">
@@ -21,6 +27,7 @@ export const Month = (props) => {
                 setDaySelected={setDaySelected}
                 setShowEventModal={setShowEventModal}
                 setSelectedEvent={setSelectedEvent}
+                savedEvents={savedEvents}
               />
             ))}
           </React.Fragment>

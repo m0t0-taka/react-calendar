@@ -1,13 +1,10 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import { MdDeleteForever, MdClose } from "react-icons/md";
 
-import GlobalContext from "../context/GlobalContext";
-
 export const EventModal = (props) => {
-  const { daySelected, setShowEventModal, selectedEvent } = props;
+  const { daySelected, setShowEventModal, selectedEvent, dispatchCalEvent } =
+    props;
   const [title, setTitle] = useState(selectedEvent ? selectedEvent.title : "");
-
-  const { dispatchCalEvent } = useContext(GlobalContext);
 
   const handleSubmit = (e) => {
     // クリック時に送信するというdefaultの動作をキャンセルする
