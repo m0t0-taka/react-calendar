@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import dayjs from "dayjs";
+import { MonthIdx } from "../App";
 
 export const Day = (props) => {
   const {
@@ -9,13 +10,26 @@ export const Day = (props) => {
     setSelectedEvent,
     savedEvents,
   } = props;
+
+  const { monthIndex } = useContext(MonthIdx);
   const [dayEvents, setDayEvents] = useState([]);
 
   // 今日の日付を色付けする
   const getCurrentDayClass = () => {
     return day.format("DD-MM-YY") === dayjs().format("DD-MM-YY")
-      ? "bg-blue-600 text-white rounded-full leading-4 mb-1"
+      ? "bg-blue-600 text-white rounded-full mb-0"
       : "";
+  };
+
+  // ヘッダーの表示月と表示している日付の月が一致しない場合
+  // ヘッダーの表示月
+  const headerMonth = dayjs(new Date(dayjs().year(), monthIndex)).format(
+    "MM-YY"
+  );
+  // 表示している日付の月
+  const calendarMonth = day.format("MM-YY");
+  const notCurrentMonthDay = () => {
+    return headerMonth !== calendarMonth ? "text-gray-300" : "";
   };
 
   // 登録データを日付が一致する日に表示
@@ -29,7 +43,9 @@ export const Day = (props) => {
   return (
     <div className="border border-gray-200 flex flex-col">
       <header className="flex flex-col items-center">
-        <p className={`text-sm p-1 text-center" ${getCurrentDayClass()}`}>
+        <p
+          className={`text-sm p-1 text-center leading-3 ${getCurrentDayClass()} ${notCurrentMonthDay()}`}
+        >
           {day.format("DD")}
         </p>
       </header>
