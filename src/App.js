@@ -1,10 +1,11 @@
-import { useState, useEffect, useReducer } from "react";
+import { useState, useEffect, useReducer, createContext } from "react";
 import dayjs from "dayjs";
 
 import { getMonth } from "./util";
 import { CalendarHeader } from "./components/CalendarHeader";
 import { Month } from "./components/Month";
 import { EventModal } from "./components/EventModal";
+import { useMonthIndexContext } from "./contexts/MonthContext";
 
 const saveEventsReducer = (state, { type, payload }) => {
   switch (type) {
@@ -21,7 +22,6 @@ const saveEventsReducer = (state, { type, payload }) => {
 
 const initEvents = () => {
   const storageEvents = localStorage.getItem("savedEvents");
-  console.log(storageEvents);
   const parsedEvents = storageEvents ? JSON.parse(storageEvents) : [];
   return parsedEvents;
 };
@@ -29,9 +29,10 @@ const initEvents = () => {
 function App() {
   const [currentMonth, setCurrentMonth] = useState(getMonth());
   const [daySelected, setDaySelected] = useState(dayjs());
-  const [monthIndex, setMonthIndex] = useState(dayjs().month());
   const [showEventModal, setShowEventModal] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
+
+  const { monthIndex } = useMonthIndexContext();
 
   // 第2引数がinitialValue, 第3引数がinitialFunction
   const [savedEvents, dispatchCalEvent] = useReducer(
@@ -67,7 +68,7 @@ function App() {
         />
       )}
       <div className="h-screen flex flex-col">
-        <CalendarHeader monthIndex={monthIndex} setMonthIndex={setMonthIndex} />
+        <CalendarHeader />
         <div className="flex flex-1 p-2">
           <Month
             month={currentMonth}
