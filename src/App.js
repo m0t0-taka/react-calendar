@@ -5,8 +5,7 @@ import { getMonth } from "./util";
 import { CalendarHeader } from "./components/CalendarHeader";
 import { Month } from "./components/Month";
 import { EventModal } from "./components/EventModal";
-
-export const MonthIdx = createContext();
+import { useMonthIndexContext } from "./contexts/MonthContext";
 
 const saveEventsReducer = (state, { type, payload }) => {
   switch (type) {
@@ -30,14 +29,10 @@ const initEvents = () => {
 function App() {
   const [currentMonth, setCurrentMonth] = useState(getMonth());
   const [daySelected, setDaySelected] = useState(dayjs());
-  const [monthIndex, setMonthIndex] = useState(dayjs().month());
   const [showEventModal, setShowEventModal] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
 
-  const monthIdxValue = {
-    monthIndex,
-    setMonthIndex,
-  };
+  const { monthIndex } = useMonthIndexContext();
 
   // 第2引数がinitialValue, 第3引数がinitialFunction
   const [savedEvents, dispatchCalEvent] = useReducer(
@@ -73,18 +68,16 @@ function App() {
         />
       )}
       <div className="h-screen flex flex-col">
-        <MonthIdx.Provider value={monthIdxValue}>
-          <CalendarHeader />
-          <div className="flex flex-1 p-2">
-            <Month
-              month={currentMonth}
-              setDaySelected={setDaySelected}
-              setShowEventModal={setShowEventModal}
-              setSelectedEvent={setSelectedEvent}
-              savedEvents={savedEvents}
-            />
-          </div>
-        </MonthIdx.Provider>
+        <CalendarHeader />
+        <div className="flex flex-1 p-2">
+          <Month
+            month={currentMonth}
+            setDaySelected={setDaySelected}
+            setShowEventModal={setShowEventModal}
+            setSelectedEvent={setSelectedEvent}
+            savedEvents={savedEvents}
+          />
+        </div>
       </div>
     </>
   );

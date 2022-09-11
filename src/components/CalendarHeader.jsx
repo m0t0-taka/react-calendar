@@ -1,13 +1,13 @@
-import React, { useContext } from "react";
+import React from "react";
 import dayjs from "dayjs";
 import ja from "dayjs/locale/ja";
 import { MdChevronLeft, MdChevronRight } from "react-icons/md";
-import { MonthIdx } from "../App";
+import { useMonthIndexContext } from "../contexts/MonthContext";
 
 dayjs.locale(ja);
 
 export const CalendarHeader = () => {
-  const { monthIndex, setMonthIndex } = useContext(MonthIdx);
+  const { monthIndex, setMonthIndex } = useMonthIndexContext();
 
   const handlePrevMonth = () => {
     setMonthIndex(monthIndex - 1);

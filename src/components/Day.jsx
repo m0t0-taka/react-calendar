@@ -1,6 +1,6 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import dayjs from "dayjs";
-import { MonthIdx } from "../App";
+import { useMonthIndexContext } from "../contexts/MonthContext";
 
 export const Day = (props) => {
   const {
@@ -11,7 +11,7 @@ export const Day = (props) => {
     savedEvents,
   } = props;
 
-  const { monthIndex } = useContext(MonthIdx);
+  const { monthIndex } = useMonthIndexContext();
   const [dayEvents, setDayEvents] = useState([]);
 
   // 今日の日付を色付けする
