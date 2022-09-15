@@ -1,22 +1,103 @@
-import React from "react";
+import React, { useReducer, useState } from "react";
 import { MdModeEditOutline, MdDeleteOutline } from "react-icons/md";
 
 import { IconContext } from "react-icons";
+import { useEffect } from "react";
+import { EditModal } from "./EditModal";
+import { ConfirmModal } from "./ConfirmModal";
 
-const handleRegister = () => {};
+const registerSchedule = (state, { type, payload }) => {
+  switch (type) {
+    case "push":
+      return [...state, payload];
+    case "update":
+      return state.map((data) => (data.id === payload.id ? payload : data));
+    case "delete":
+      return state.filter((data) => data.id !== payload.id);
+    default:
+      return null;
+  }
+};
+
+const initSchedules = () => {
+  const storageSchedule = localStorage.getItem("savedSchedules");
+  const parsedSchedules = storageSchedule ? JSON.parse(storageSchedule) : [];
+  return parsedSchedules;
+};
 
 export const Title = () => {
+  const [title, setTitle] = useState("");
+  const [validation, setValidation] = useState("");
+  const [editModal, setEditModal] = useState(false);
+  const [confirmModal, setConfirmModal] = useState(false);
+  const [selectedTitle, setSelectedTitle] = useState(null);
+  const [selectedDelete, setSelectedDelete] = useState(false);
+  const [schedules, dispatchScheduleTitle] = useReducer(
+    registerSchedule,
+    [],
+    initSchedules
+  );
+  const handleRegister = (e) => {
+    // クリック時に送信するというdefaultの動作をキャンセルする
+    e.preventDefault();
+    if (!title) {
+      setValidation("タイトルを入力してください");
+    } else {
+      const scheduleTitle = {
+        id: Date.now(),
+        title: title,
+      };
+      dispatchScheduleTitle({ type: "push", payload: scheduleTitle });
+    }
+    setTitle("");
+  };
+
+  // 削除ボタン押下でモーダル表示
+  useEffect(() => {
+    if (selectedDelete) {
+      setConfirmModal(true);
+    }
+  }, [selectedDelete]);
+
+  // 編集ボタン押下でモーダル表示
+  useEffect(() => {
+    if (selectedTitle) {
+      setEditModal(true);
+    }
+  }, [selectedTitle]);
+
+  useEffect(() => {
+    localStorage.setItem("savedSchedules", JSON.stringify(schedules));
+  }, [schedules]);
+
   return (
-    <div className="flex justify-center mx-auto">
+    <div className="flex justify-center mx-auto my-5">
       <div className="flex flex-col">
-        <div className="flex justify-end my-4">
-          <button
-            type="submit"
-            onClick={handleRegister}
-            className="bg-blue-500 hover:bg-blue-600 px-3 py-1 rounded text-white"
-          >
-            追加登録
-          </button>
+        <div className="flex mb-5">
+          <div className="flex-1 w-48 mr-2">
+            <p className="block my-2 text-lg font-medium text-gray-900 dark:text-gray-800">
+              タイトル登録
+            </p>
+            <input
+              type="text"
+              id="title"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+              placeholder="タイトル"
+              required
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+            />
+            <p className="text-rose-600">{validation ? validation : ""}</p>
+          </div>
+          <div className="flex-none w-24 ml-5 mt-11">
+            <button
+              type="submit"
+              onClick={handleRegister}
+              className="bg-orange-200 hover:bg-orange-300 text-yellow-700 px-4 py-2 rounded-md shadow-sm"
+            >
+              追加登録
+            </button>
+          </div>
         </div>
         <div className="w-full">
           <div className="border-b border-gray-200 shadow">
@@ -31,34 +112,52 @@ export const Title = () => {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-300">
-                <tr className="whitespace-nowrap">
-                  <td className="w-80 px-6 py-4 text-base text-gray-900">
-                    羽島店ああああ
-                  </td>
-                  <td className="px-6 py-4 text-center leading-4">
-                    <IconContext.Provider
-                      value={{ color: "#2563eb", size: "16px" }}
-                    >
-                      <button>
-                        <MdModeEditOutline />
-                      </button>
-                    </IconContext.Provider>
-                  </td>
-                  <td className="px-6 py-4 text-center leading-4">
-                    <IconContext.Provider
-                      value={{ color: "#dc2626", size: "16px" }}
-                    >
-                      <button>
-                        <MdDeleteOutline />
-                      </button>
-                    </IconContext.Provider>
-                  </td>
-                </tr>
+                {schedules.map((data, i) => (
+                  <tr className="whitespace-nowrap" key={i}>
+                    <td className="w-80 px-6 py-4 text-base text-gray-900">
+                      {data.title}
+                    </td>
+                    <td className="px-6 py-4 text-center leading-4">
+                      <IconContext.Provider
+                        value={{ color: "#3b82f6", size: "16px" }}
+                      >
+                        <button onClick={() => setSelectedTitle(data)}>
+                          {/* {console.log(data)} */}
+                          <MdModeEditOutline />
+                        </button>
+                      </IconContext.Provider>
+                    </td>
+                    <td className="px-6 py-4 text-center leading-4">
+                      <IconContext.Provider
+                        value={{ color: "#ec4899", size: "16px" }}
+                      >
+                        <button onClick={() => setSelectedDelete(data)}>
+                          <MdDeleteOutline />
+                        </button>
+                      </IconContext.Provider>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
         </div>
       </div>
+      <EditModal
+        showFlag={editModal}
+        setEditModal={setEditModal}
+        selectedTitle={selectedTitle}
+        setSelectedTitle={setSelectedTitle}
+        setTitle={setTitle}
+        dispatchScheduleTitle={dispatchScheduleTitle}
+      />
+      <ConfirmModal
+        confirmModal={confirmModal}
+        setConfirmModal={setConfirmModal}
+        selectedDelete={selectedDelete}
+        setSelectedDelete={setSelectedDelete}
+        dispatchScheduleTitle={dispatchScheduleTitle}
+      />
     </div>
   );
 };

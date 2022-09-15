@@ -47,7 +47,7 @@ export const CalendarHeader = () => {
       </button>
       <button
         onClick={handleTitleList}
-        className="border rounded py-2 px-4 ml-5"
+        className="bg-orange-200 hover:bg-orange-300 text-yellow-700 rounded-md shadow-sm py-2 px-4 ml-5"
       >
         登録タイトル
       </button>

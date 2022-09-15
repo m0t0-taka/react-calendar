@@ -146,7 +146,7 @@ export const EventModal = (props) => {
           <button
             type="submit"
             onClick={handleSubmit}
-            className="bg-blue-500 hover:bg-blue-600 px-6 py-2 rounded text-white"
+            className="bg-orange-200 hover:bg-orange-300 px-6 py-2 rounded text-yellow-700"
           >
             {selectedEvent === null ? "保存" : "更新"}
           </button>
