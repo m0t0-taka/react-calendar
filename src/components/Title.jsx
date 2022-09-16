@@ -1,5 +1,10 @@
 import React, { useReducer, useState } from "react";
-import { MdModeEditOutline, MdDeleteOutline } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
+import {
+  MdModeEditOutline,
+  MdDeleteOutline,
+  MdArrowBackIosNew,
+} from "react-icons/md";
 
 import { IconContext } from "react-icons";
 import { useEffect } from "react";
@@ -70,14 +75,29 @@ export const Title = () => {
     localStorage.setItem("savedSchedules", JSON.stringify(schedules));
   }, [schedules]);
 
+  let navigate = useNavigate();
+
+  const handleBackCalendar = () => {
+    navigate("/home");
+  };
+
   return (
     <div className="flex justify-center mx-auto my-5">
       <div className="flex flex-col">
-        <div className="flex mb-5">
-          <div className="flex-1 w-48 mr-2">
-            <p className="block my-2 text-lg font-medium text-gray-900 dark:text-gray-800">
-              タイトル登録
+        <div className="flex my-3">
+          <div className="flex-none w-40 mt-1">
+            <button onClick={handleBackCalendar}>
+              <MdArrowBackIosNew />
+            </button>
+          </div>
+          <div className="flex-1">
+            <p className="block text-lg font-medium text-gray-900 dark:text-gray-800">
+              登録タイトル一覧
             </p>
+          </div>
+        </div>
+        <div className="flex my-7">
+          <div className="flex-1 w-48 mr-2">
             <input
               type="text"
               id="title"
@@ -89,7 +109,7 @@ export const Title = () => {
             />
             <p className="text-rose-600">{validation ? validation : ""}</p>
           </div>
-          <div className="flex-none w-24 ml-5 mt-11">
+          <div className="flex-none w-24 ml-5">
             <button
               type="submit"
               onClick={handleRegister}
