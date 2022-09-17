@@ -17,7 +17,7 @@ export const Day = (props) => {
   // 今日の日付を色付けする
   const getCurrentDayClass = () => {
     return day.format("DD-MM-YY") === dayjs().format("DD-MM-YY")
-      ? "bg-blue-600 text-white rounded-full mb-0"
+      ? "bg-orange-300 text-white rounded-full mb-0"
       : "";
   };
 
@@ -44,7 +44,7 @@ export const Day = (props) => {
     <div className="border border-gray-200 flex flex-col">
       <header className="flex flex-col items-center">
         <p
-          className={`text-sm p-1 text-center leading-3 ${getCurrentDayClass()} ${notCurrentMonthDay()}`}
+          className={`text-sm p-1 text-center leading-4 ${getCurrentDayClass()} ${notCurrentMonthDay()}`}
         >
           {day.format("DD")}
         </p>

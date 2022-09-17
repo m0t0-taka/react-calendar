@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { MdDeleteForever, MdClose } from "react-icons/md";
 import { IconContext } from "react-icons";
 
 export const EventModal = (props) => {
   const { daySelected, setShowEventModal, selectedEvent, dispatchCalEvent } =
     props;
+  const [titleList, setTitleList] = useState([]);
   const [title, setTitle] = useState(selectedEvent ? selectedEvent.title : "");
   const [validation, setValidation] = useState("");
   const [hour, setHour] = useState(
@@ -18,11 +19,25 @@ export const EventModal = (props) => {
   );
   const [time, setTime] = useState(selectedEvent ? selectedEvent.time : "");
 
+  const selectTitle = useCallback(() => {
+    const storageSchedule = localStorage.getItem("savedSchedules");
+    const parsedSchedules = storageSchedule ? JSON.parse(storageSchedule) : [];
+    parsedSchedules.unshift({
+      id: 1,
+      title: "選択してください",
+    });
+    setTitleList(parsedSchedules);
+  }, []);
+
+  useEffect(() => {
+    selectTitle();
+  }, [selectTitle]);
+
   const handleSubmit = (e) => {
     // クリック時に送信するというdefaultの動作をキャンセルする
     e.preventDefault();
     if (!title) {
-      setValidation("タイトルを入力してください");
+      setValidation("タイトルを選択してください");
     } else {
       const calendarEvent = {
         id: selectedEvent ? selectedEvent.id : Date.now(),
@@ -85,59 +100,65 @@ export const EventModal = (props) => {
         </header>
         <div className="p-3">
           <div className="grid grid-cols-1/5 items-end gap-y-2">
-            <input
-              type="text"
-              name="title"
-              placeholder="タイトル"
+            <label className="block mt-3 mb-0 ml-2 text-base font-medium text-gray-600">
+              タイトル
+            </label>
+            <select
               value={title}
-              required
-              className="pt-3 border-0 text-gray-600 text-xl font-semibold pb-2 w-full border-b-2 border-gray-200 focus:outline-none focus:ring-0 focus:border-blue-500"
               onChange={(e) => setTitle(e.target.value)}
-            />
+              className="bg-gray-50 border border-gray-300 text-gray-600 text-lg rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+            >
+              {titleList.map((tList, i) => (
+                <option value={tList.title} key={tList.id}>
+                  {tList.title}
+                </option>
+              ))}
+            </select>
+
             <p className="text-rose-600">{validation ? validation : ""}</p>
-            <div className="flex">
-              <div className="flex-none pr-2 py-2 text-base">時刻</div>
-              <div className="flex-initial px-5 py-2 w-40 bg-white rounded-lg text-lg font-medium outline outline-offset-2 outline-1 outline-gray-200">
-                <div className="flex text-gray-600">
-                  <select
-                    name="hours"
-                    className="bg-transparent text-xl appearance-none outline-none"
-                    value={hour}
-                    onChange={handleChangeHour}
-                  >
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                    <option value="6">6</option>
-                    <option value="7">7</option>
-                    <option value="8">8</option>
-                    <option value="9">9</option>
-                    <option value="10">10</option>
-                    <option value="11">11</option>
-                    <option value="12">12</option>
-                  </select>
-                  <span className="text-xl mr-3">:</span>
-                  <select
-                    name="minutes"
-                    className="bg-transparent text-xl appearance-none outline-none mr-4"
-                    value={minute}
-                    onChange={handleChangeMinute}
-                  >
-                    <option value="00">00</option>
-                    <option value="30">30</option>
-                  </select>
-                  <select
-                    name="amPm"
-                    className="bg-transparent text-xl appearance-none outline-none"
-                    value={amPm}
-                    onChange={handleChangeAmPm}
-                  >
-                    <option value="AM">AM</option>
-                    <option value="PM">PM</option>
-                  </select>
-                </div>
+            <div className="flex-none mt-3 ml-2 text-base font-medium text-gray-600">
+              時刻
+            </div>
+            <div className="bg-gray-50 border border-gray-300 flex-initial px-7 py-2 w-40 rounded-lg text-lg font-base justify-self-center">
+              <div className="flex text-gray-600">
+                <select
+                  name="hours"
+                  className="bg-transparent text-lg appearance-none outline-none"
+                  value={hour}
+                  onChange={handleChangeHour}
+                >
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                  <option value="6">6</option>
+                  <option value="7">7</option>
+                  <option value="8">8</option>
+                  <option value="9">9</option>
+                  <option value="10">10</option>
+                  <option value="11">11</option>
+                  <option value="12">12</option>
+                </select>
+                <span className="text-lg mx-2">:</span>
+                <select
+                  name="minutes"
+                  className="bg-transparent text-lg appearance-none outline-none mr-4"
+                  value={minute}
+                  onChange={handleChangeMinute}
+                >
+                  <option value="00">00</option>
+                  <option value="30">30</option>
+                </select>
+                <select
+                  name="amPm"
+                  className="bg-transparent text-lg appearance-none outline-none"
+                  value={amPm}
+                  onChange={handleChangeAmPm}
+                >
+                  <option value="AM">AM</option>
+                  <option value="PM">PM</option>
+                </select>
               </div>
             </div>
           </div>
@@ -146,7 +167,7 @@ export const EventModal = (props) => {
           <button
             type="submit"
             onClick={handleSubmit}
-            className="bg-blue-500 hover:bg-blue-600 px-6 py-2 rounded text-white"
+            className="bg-orange-200 hover:bg-orange-300 px-6 py-2 rounded text-yellow-700"
           >
             {selectedEvent === null ? "保存" : "更新"}
           </button>
