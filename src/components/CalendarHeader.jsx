@@ -1,13 +1,15 @@
+import React from "react";
+import { useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
 import ja from "dayjs/locale/ja";
-import React, { useContext } from "react";
 import { MdChevronLeft, MdChevronRight } from "react-icons/md";
-import GlobalContext from "../context/GlobalContext";
+import { useMonthIndexContext } from "../contexts/MonthContext";
 
 dayjs.locale(ja);
 
 export const CalendarHeader = () => {
-  const { monthIndex, setMonthIndex } = useContext(GlobalContext);
+  const { monthIndex, setMonthIndex } = useMonthIndexContext();
+
   const handlePrevMonth = () => {
     setMonthIndex(monthIndex - 1);
   };
@@ -17,6 +19,12 @@ export const CalendarHeader = () => {
   const handleReset = () => {
     // 現在の月を取得
     setMonthIndex(dayjs().month());
+  };
+
+  let navigate = useNavigate();
+
+  const handleTitleList = () => {
+    navigate("/title");
   };
   return (
     <header className="px-4 py-2 flex items-center">
@@ -29,16 +37,19 @@ export const CalendarHeader = () => {
           <MdChevronLeft />
         </span>
       </button>
-      {/* <div> */}
       <h2 className="mx-1 text-xl text-gray-500 font-bold w-32">
         {dayjs(new Date(dayjs().year(), monthIndex)).format("YYYY年 MMM")}
       </h2>
-      {/* </div> */}
-
       <button onClick={handelNextMonth}>
         <span className="cursor-pointer text-gray-600 mx-2">
           <MdChevronRight />
         </span>
+      </button>
+      <button
+        onClick={handleTitleList}
+        className="bg-orange-200 hover:bg-orange-300 text-yellow-700 rounded-md shadow-sm py-2 px-4 ml-5"
+      >
+        登録タイトル
       </button>
     </header>
   );
