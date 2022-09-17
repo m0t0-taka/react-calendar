@@ -60,7 +60,7 @@ export const Day = (props) => {
           <div
             key={idx}
             onClick={() => setSelectedEvent(evt)}
-            className={`bg-neutral-200 p-1 mx-0.5 text-gray-600 text-sm rounded mb-1 truncate flex justify-between`}
+            className={`bg-orange-100 p-1 mx-0.5 text-yellow-700 text-sm rounded mb-1 truncate flex justify-between`}
           >
             <div>{evt.title}</div>
             <div>{evt.time}</div>
