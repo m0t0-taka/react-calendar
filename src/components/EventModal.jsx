@@ -110,13 +110,13 @@ export const EventModal = (props) => {
             </IconContext.Provider>
           </div>
         </header>
+
         <div className="p-3">
           <div className="grid grid-cols-1/5 items-end gap-y-2">
             <label className="block mt-3 mb-0 ml-2 text-base font-medium text-gray-600">
-              タイトル
+              タグ
             </label>
-
-            <div className="flex">
+            <div className="flex ml-2">
               {checkList.map((cList, i) => (
                 <div key={i} className="flex items-center mr-4">
                   <input
@@ -132,6 +132,10 @@ export const EventModal = (props) => {
                 </div>
               ))}
             </div>
+
+            <label className="block mt-3 mb-0 ml-2 text-base font-medium text-gray-600">
+              タイトル
+            </label>
 
             <select
               value={title}

@@ -8,10 +8,10 @@ import {
 
 import { IconContext } from "react-icons";
 import { useEffect } from "react";
-import { EditModal } from "./EditModal";
-import { ConfirmModal } from "./ConfirmModal";
+import { EditTagModal } from "./EditTagModal";
+import { ConfirmTagModal } from "./ConfirmTagModal";
 
-const registerSchedule = (state, { type, payload }) => {
+const registerTag = (state, { type, payload }) => {
   switch (type) {
     case "push":
       return [...state, payload];
@@ -24,63 +24,58 @@ const registerSchedule = (state, { type, payload }) => {
   }
 };
 
-const initSchedules = () => {
-  const storageSchedule = localStorage.getItem("savedSchedules");
-  const parsedSchedules = storageSchedule ? JSON.parse(storageSchedule) : [];
-  return parsedSchedules;
+const initTags = () => {
+  const storageTag = localStorage.getItem("savedTags");
+  const parsedTags = storageTag ? JSON.parse(storageTag) : [];
+  return parsedTags;
 };
 
-export const Title = () => {
-  const [title, setTitle] = useState("");
+export const Tag = () => {
+  const [tagName, setTagName] = useState("");
   const [validation, setValidation] = useState("");
   const [editModal, setEditModal] = useState(false);
   const [confirmModal, setConfirmModal] = useState(false);
-  const [selectedTitle, setSelectedTitle] = useState("");
-  const [selectedDelete, setSelectedDelete] = useState("");
-  const [schedules, dispatchScheduleTitle] = useReducer(
-    registerSchedule,
-    [],
-    initSchedules
-  );
+  const [selectedEditTag, setSelectedEditTag] = useState("");
+  const [selectedDeleteTag, setSelectedDeleteTag] = useState("");
+  const [tags, dispatchTagName] = useReducer(registerTag, [], initTags);
 
-  const duplicationCheck = schedules
-    .map((sTitle) => sTitle.title)
-    .includes(title);
+  const duplicationCheck = tags.map((t) => t.tag).includes(tagName);
+
   const handleRegister = (e) => {
     // クリック時に送信するというdefaultの動作をキャンセルする
     e.preventDefault();
-    if (!title) {
-      setValidation("タイトルを入力してください");
+    if (!tagName) {
+      setValidation("タグを入力してください");
     } else if (duplicationCheck) {
-      setValidation("既に登録済みのタイトルです");
+      setValidation("既に登録済みのタグです");
     } else {
-      const scheduleTitle = {
+      const scheduleTag = {
         id: Date.now(),
-        title: title,
+        tag: tagName,
       };
-      dispatchScheduleTitle({ type: "push", payload: scheduleTitle });
+      dispatchTagName({ type: "push", payload: scheduleTag });
       setValidation("");
     }
-    setTitle("");
+    setTagName("");
   };
 
   // 削除ボタン押下でモーダル表示
   useEffect(() => {
-    if (selectedDelete) {
+    if (selectedDeleteTag) {
       setConfirmModal(true);
     }
-  }, [selectedDelete]);
+  }, [selectedDeleteTag]);
 
   // 編集ボタン押下でモーダル表示
   useEffect(() => {
-    if (selectedTitle) {
+    if (selectedEditTag) {
       setEditModal(true);
     }
-  }, [selectedTitle]);
+  }, [selectedEditTag]);
 
   useEffect(() => {
-    localStorage.setItem("savedSchedules", JSON.stringify(schedules));
-  }, [schedules]);
+    localStorage.setItem("savedTags", JSON.stringify(tags));
+  }, [tags]);
 
   let navigate = useNavigate();
 
@@ -99,7 +94,7 @@ export const Title = () => {
           </div>
           <div className="flex-1">
             <p className="block text-lg font-medium text-gray-900 dark:text-gray-800">
-              登録タイトル一覧
+              登録タグ一覧
             </p>
           </div>
         </div>
@@ -107,12 +102,11 @@ export const Title = () => {
           <div className="flex-1 w-48 mr-2">
             <input
               type="text"
-              id="title"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-              placeholder="タイトル"
+              placeholder="タグ"
               required
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
+              value={tagName}
+              onChange={(e) => setTagName(e.target.value)}
             />
             <p className="text-rose-600">{validation ? validation : ""}</p>
           </div>
@@ -139,16 +133,16 @@ export const Title = () => {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-300">
-                {schedules.map((data, i) => (
+                {tags.map((data, i) => (
                   <tr className="whitespace-nowrap" key={i}>
                     <td className="w-80 px-6 py-4 text-base text-gray-900">
-                      {data.title}
+                      {data.tag}
                     </td>
                     <td className="px-6 py-4 text-center leading-4">
                       <IconContext.Provider
                         value={{ color: "#3b82f6", size: "16px" }}
                       >
-                        <button onClick={() => setSelectedTitle(data)}>
+                        <button onClick={() => setSelectedEditTag(data)}>
                           <MdModeEditOutline />
                         </button>
                       </IconContext.Provider>
@@ -157,7 +151,7 @@ export const Title = () => {
                       <IconContext.Provider
                         value={{ color: "#ec4899", size: "16px" }}
                       >
-                        <button onClick={() => setSelectedDelete(data)}>
+                        <button onClick={() => setSelectedDeleteTag(data)}>
                           <MdDeleteOutline />
                         </button>
                       </IconContext.Provider>
@@ -169,19 +163,19 @@ export const Title = () => {
           </div>
         </div>
       </div>
-      <EditModal
+      <EditTagModal
         editModal={editModal}
         setEditModal={setEditModal}
-        selectedTitle={selectedTitle}
-        setSelectedTitle={setSelectedTitle}
-        dispatchScheduleTitle={dispatchScheduleTitle}
+        selectedEditTag={selectedEditTag}
+        setSelectedEditTag={setSelectedEditTag}
+        dispatchTagName={dispatchTagName}
       />
-      <ConfirmModal
+      <ConfirmTagModal
         confirmModal={confirmModal}
         setConfirmModal={setConfirmModal}
-        selectedDelete={selectedDelete}
-        setSelectedDelete={setSelectedDelete}
-        dispatchScheduleTitle={dispatchScheduleTitle}
+        selectedDeleteTag={selectedDeleteTag}
+        setSelectedDeleteTag={setSelectedDeleteTag}
+        dispatchTagName={dispatchTagName}
       />
     </div>
   );
