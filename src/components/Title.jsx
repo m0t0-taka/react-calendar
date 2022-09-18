@@ -85,7 +85,7 @@ export const Title = () => {
   let navigate = useNavigate();
 
   const handleBackCalendar = () => {
-    navigate("/home");
+    navigate("/");
   };
 
   return (

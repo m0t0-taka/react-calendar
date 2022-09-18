@@ -80,7 +80,7 @@ export const Tag = () => {
   let navigate = useNavigate();
 
   const handleBackCalendar = () => {
-    navigate("/home");
+    navigate("/");
   };
 
   return (
