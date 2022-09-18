@@ -1,41 +1,30 @@
-import React, { useState } from "react";
-import { useEffect } from "react";
+import React from "react";
 
-export const EditModal = (props) => {
+export const ConfirmTagModal = (props) => {
   const {
-    editModal,
-    setEditModal,
-    selectedTitle,
-    dispatchScheduleTitle,
-    setSelectedTitle,
+    confirmModal,
+    setConfirmModal,
+    selectedDeleteTag,
+    setSelectedDeleteTag,
+    dispatchTagName,
   } = props;
-  const [editTitle, setEditTitle] = useState("");
 
-  useEffect(() => {
-    if (selectedTitle) {
-      setEditTitle(selectedTitle.title);
-    }
-  }, [selectedTitle]);
-
-  const handleUpdate = (e) => {
-    e.preventDefault();
-    const registerTitle = {
-      id: selectedTitle.id,
-      title: editTitle,
-    };
-    dispatchScheduleTitle({ type: "update", payload: registerTitle });
-    setEditModal(false);
+  const handleDelete = () => {
+    dispatchTagName({
+      type: "delete",
+      payload: selectedDeleteTag,
+    });
+    setConfirmModal(false);
   };
 
-  const handleCancel = (e) => {
-    e.preventDefault();
-    setEditModal(false);
-    setSelectedTitle("");
+  const handleCancel = () => {
+    setConfirmModal(false);
+    setSelectedDeleteTag("");
   };
 
   return (
     <>
-      {editModal ? (
+      {confirmModal ? (
         <div
           className="relative z-10"
           aria-labelledby="modal-title"
@@ -49,22 +38,8 @@ export const EditModal = (props) => {
                 <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                   <div className="sm:flex sm:items-start">
                     <div className="mt-3 text-center sm:mt-0 sm:mx-4 sm:text-left">
-                      <h3
-                        className="text-lg font-medium leading-6 text-gray-900"
-                        id="modal-title"
-                      >
-                        タイトル編集
-                      </h3>
                       <div className="mt-2">
-                        <input
-                          type="text"
-                          id="title"
-                          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-80 p-2.5"
-                          placeholder="タイトル"
-                          required
-                          value={editTitle}
-                          onChange={(e) => setEditTitle(e.target.value)}
-                        />
+                        {selectedDeleteTag.tag} を本当に削除するのかい？
                       </div>
                     </div>
                   </div>
@@ -73,9 +48,9 @@ export const EditModal = (props) => {
                   <button
                     type="button"
                     className="inline-flex w-full justify-center rounded-md border border-transparent bg-orange-200 hover:bg-orange-300 px-4 py-2 text-base text-yellow-700 font-medium shadow-sm focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm"
-                    onClick={handleUpdate}
+                    onClick={handleDelete}
                   >
-                    更新
+                    うん、削除
                   </button>
                   <button
                     type="button"

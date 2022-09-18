@@ -1,36 +1,36 @@
 import React, { useState } from "react";
 import { useEffect } from "react";
 
-export const EditModal = (props) => {
+export const EditTagModal = (props) => {
   const {
     editModal,
     setEditModal,
-    selectedTitle,
-    dispatchScheduleTitle,
-    setSelectedTitle,
+    selectedEditTag,
+    setSelectedEditTag,
+    dispatchTagName,
   } = props;
-  const [editTitle, setEditTitle] = useState("");
+  const [editTag, setEditTag] = useState("");
 
   useEffect(() => {
-    if (selectedTitle) {
-      setEditTitle(selectedTitle.title);
+    if (selectedEditTag) {
+      setEditTag(selectedEditTag.tag);
     }
-  }, [selectedTitle]);
+  }, [selectedEditTag]);
 
   const handleUpdate = (e) => {
     e.preventDefault();
-    const registerTitle = {
-      id: selectedTitle.id,
-      title: editTitle,
+    const updateTag = {
+      id: selectedEditTag.id,
+      tag: editTag,
     };
-    dispatchScheduleTitle({ type: "update", payload: registerTitle });
+    dispatchTagName({ type: "update", payload: updateTag });
     setEditModal(false);
   };
 
   const handleCancel = (e) => {
     e.preventDefault();
     setEditModal(false);
-    setSelectedTitle("");
+    setSelectedEditTag("");
   };
 
   return (
@@ -62,8 +62,8 @@ export const EditModal = (props) => {
                           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-80 p-2.5"
                           placeholder="タイトル"
                           required
-                          value={editTitle}
-                          onChange={(e) => setEditTitle(e.target.value)}
+                          value={editTag}
+                          onChange={(e) => setEditTag(e.target.value)}
                         />
                       </div>
                     </div>

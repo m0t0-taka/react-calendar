@@ -23,9 +23,14 @@ export const CalendarHeader = () => {
 
   let navigate = useNavigate();
 
-  const handleTitleList = () => {
+  const linkToTitleList = () => {
     navigate("/title");
   };
+
+  const linkToTagList = () => {
+    navigate("/tag");
+  };
+
   return (
     <header className="px-4 py-2 flex items-center">
       <h1 className="mr-10 text-xl text-gray-500 fond-bold">月間カレンダー</h1>
@@ -46,10 +51,16 @@ export const CalendarHeader = () => {
         </span>
       </button>
       <button
-        onClick={handleTitleList}
-        className="bg-orange-200 hover:bg-orange-300 text-yellow-700 rounded-md shadow-sm py-2 px-4 ml-5"
+        onClick={linkToTitleList}
+        className="bg-orange-200 hover:bg-orange-300 text-yellow-700 rounded-md shadow-sm py-2 px-4 ml-5 w-28"
       >
-        登録タイトル
+        タイトル
+      </button>
+      <button
+        onClick={linkToTagList}
+        className="bg-orange-200 hover:bg-orange-300 text-yellow-700 rounded-md shadow-sm py-2 px-4 ml-5 w-28"
+      >
+        タグ
       </button>
     </header>
   );
